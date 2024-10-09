@@ -17,7 +17,7 @@ import { encodeHex } from 'oslo/encoding'
 import { generateIdFromEntropySize, type User } from 'lucia'
 // import { hash, verify } from '@node-rs/argon2'
 import { hash, verify } from './password'
-import { PostgresError } from 'postgres'
+
 import { emailTemplate, sendMail } from '$lib/server/services/email'
 
 export function isValidEmail(email: string): boolean {
@@ -401,16 +401,16 @@ export const user = {
             },
           }
         } catch (e) {
-          if (
-            e instanceof PostgresError &&
-            e.code === 'SQLITE_CONSTRAINT_UNIQUE'
-          ) {
-            return {
-              error: {
-                message: 'Username or Email already used',
-              },
-            }
-          }
+          // if (
+          //   e instanceof PostgresError &&
+          //   e.code === 'SQLITE_CONSTRAINT_UNIQUE'
+          // ) {
+          //   return {
+          //     error: {
+          //       message: 'Username or Email already used',
+          //     },
+          //   }
+          // }
           console.error(e)
           return {
             error: {
@@ -448,16 +448,16 @@ export const user = {
             },
           }
         } catch (e) {
-          if (
-            e instanceof PostgresError &&
-            e.code === 'SQLITE_CONSTRAINT_UNIQUE'
-          ) {
-            return {
-              error: {
-                message: 'Username already used',
-              },
-            }
-          }
+          // if (
+          //   e instanceof PostgresError &&
+          //   e.code === 'SQLITE_CONSTRAINT_UNIQUE'
+          // ) {
+          //   return {
+          //     error: {
+          //       message: 'Username already used',
+          //     },
+          //   }
+          // }
           console.error(e)
           return {
             error: {

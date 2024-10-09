@@ -12,7 +12,7 @@ class MyLogWriter implements LogWriter {
 const logger = new DefaultLogger({ writer: new MyLogWriter() })
 
 // import { dev } from '$app/environment'
-// import { env } from '$env/dynamic/private'
+import { env } from '$env/dynamic/private'
 // if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set')
 //
 // if (!dev && !env.DATABASE_AUTH_TOKEN)
@@ -25,8 +25,9 @@ const logger = new DefaultLogger({ writer: new MyLogWriter() })
 
 // *! Uncomment the following line when seeding */
 
-if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set')
+// if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set')
 
-export const client = postgress(process.env.DATABASE_URL)
+export const client = postgress(env.DATABASE_URL)
+
 
 export const db = drizzle(client, { logger, schema })

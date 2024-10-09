@@ -12,41 +12,51 @@ import {
   geometry,
   point,
   line,
+  index,
+  primaryKey,
   // customType,
 } from 'drizzle-orm/pg-core'
 import { relations, sql } from 'drizzle-orm'
+import { dataSetTable } from '../datasets/schema'
 
-export const dataSetTable = pgTable('dataset', {
+export const mapTable = pgTable('map', {
   id: serial('id').notNull().primaryKey(),
   created_at: timestamp('created_at').notNull().defaultNow(),
   created_by: text('created_by').notNull(),
+  public: boolean('public').default(false),
+  city_id: integer('city_id').references(() => citiesTable.id),
   name: text('name'),
-  type: text('type', { enum: ['lat_long', 'adress'] }).notNull(),
-  meta: json('meta')
-    .default({})
-    .$type<{ latField: string; longField: string } | { adressField: string }>(),
-  fields: text('fileds').array().notNull(),
   center: geometry('center').notNull(), // #TODO: give default value
   zoom: integer('zoom').notNull(), // #TODO: give default value
 })
 
-export const dataRowTable = pgTable('data_row', {
-  id: serial('id').notNull().primaryKey(),
-  created_at: timestamp('created_at').notNull().defaultNow(),
-  datasetId: integer('dataset_id')
-    .notNull()
-    .references(() => dataSetTable.id),
-  data: json('data').notNull().$type<Record<string, unknown>>(),
-  latLong: geometry('lat_long'),
-})
+export const mapLayerTable = pgTable(
+  'map_layer',
+  {
+    map_id: integer('map_id')
+      .notNull()
+      .references(() => mapTable.id),
+    layer_id: integer('layer_id')
+      .notNull()
+      .references(() => dataSetTable.id),
+  },
+  t => ({
+    pk: primaryKey({
+      columns: [t.map_id, t.layer_id],
+    }),
+  }),
+)
 
-export const dataChartsTable = pgTable('data_chart', {
-  id: serial('id').notNull().primaryKey(),
-  created_at: timestamp('created_at').notNull().defaultNow(),
-  datasetId: integer('dataset_id')
-    .notNull()
-    .references(() => dataSetTable.id),
-  type: text('type', { enum: ['line', 'bar', 'pie'] }).notNull(),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filters: json('filters').notNull().$type<{ label: string; query: any }[]>(),
+
+
+//  -----------------------------
+
+export const citiesTable = pgTable('cities', {
+    id: serial('id').notNull().primaryKey(),
+    verified: boolean('verified').default(false),
+    name: text('name').notNull(),
+    location: geometry('location'),
+    population: integer('population'),
+    area: integer('area'),
+    density: integer('density'),
 })
