@@ -1,0 +1,50 @@
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "bundler",
+    // "module": "NodeNext",
+    "paths": {
+      "$lib/*": ["./src/lib/*"],
+      "$lib": ["./src/lib"],
+      "$db/*": ["./src/lib/server/db/*"],
+      "$db": ["./src/lib/server/db"],
+      "$components/*": ["./src/lib/client/components/*"],
+      "$components": ["./src/lib/client/components"],
+      "$utils/*": ["./src/lib/utils/*"],
+      "$utils": ["./src/lib/utils"],
+      "$utils/client/*": ["./src/lib/client/utils/*"],
+      "$utils/client": ["./src/lib/client/utils"],
+      "$utils/server/*": ["./src/lib/server/utils/*"],
+      "$utils/server": ["./src/lib/server/utils"],
+      "$trpc/*": ["./src/lib/utils/trpc/*"],
+      "$trpc": ["./src/lib/utils/trpc"],
+      "$modal/*": ["./src/lib/components/modal/*"],
+      "$modal": ["./src/lib/components/modal"],
+      "$msgs/*": ["./src/lib/i18n/paraglide/messages/*"],
+      "$msgs": ["./src/lib/i18n/paraglide/messages"],
+    }
+
+    // $lib: './src/lib',
+    // $db: './src/lib/server/db',
+    // $components: './src/lib/client/components',
+    // $utils: './src/lib/utils',
+    // "$utils/client": './src/lib/client/utils',
+    // "$utils/server": './src/lib/server/utils',
+    // $trpc: './src/lib/utils/trpc',
+    // $modal: './src/lib/components/modal',
+    // $msgs: './src/lib/i18n/paraglide/messages',
+  }
+  // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+  // except $lib which is handled by https://kit.svelte.dev/docs/configuration#files
+  //
+  // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+  // from the referenced tsconfig.json - TypeScript does not merge them in
+}
