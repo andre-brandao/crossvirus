@@ -17,30 +17,25 @@ import { encodeHex } from 'oslo/encoding'
 import { generateIdFromEntropySize, type User } from 'lucia'
 // import { hash, verify } from '@node-rs/argon2'
 import { hash, verify } from './password'
-import { LibsqlError } from '@libsql/client'
+import { PostgresError } from 'postgres'
 import { emailTemplate, sendMail } from '$lib/server/services/email'
 
 export function isValidEmail(email: string): boolean {
   return /.+@.+/.test(email)
-  // eslint-disable-next-line no-useless-escape
-  // const re = /\S+@\S+\.\S+/;
-  // return re.test(email);
-  console.log('email', email)
-  return true
 }
 // /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 export const user = {
   getPublicInfo: function () {
     return db
       .select({
-        id: userTable.id,
-        name: userTable.name,
-        username: userTable.username,
-        email: userTable.email,
-        phone: userTable.phone,
-        created_at: userTable.created_at,
-        role: userTable.role,
-        verified: userTable.emailVerified,
+        // id: userTable.id,
+        // name: userTable.name,
+        // username: userTable.username,
+        // email: userTable.email,
+        // phone: userTable.phone,
+        // created_at: userTable.created_at,
+        // role: userTable.role,
+        // verified: userTable.emailVerified,
       })
       .from(userTable)
   },
@@ -75,7 +70,7 @@ export const user = {
       await db
         .delete(userVerificationCodeTable)
         .where(eq(userVerificationCodeTable.userId, userId))
-        .all()
+
       const code = generateRandomString(8, alphabet('0-9'))
 
       await db.insert(userVerificationCodeTable).values({
@@ -98,7 +93,6 @@ export const user = {
       await db
         .delete(userVerificationCodeTable)
         .where(eq(userVerificationCodeTable.id, databaseCode.id))
-        .run()
 
       if (!isWithinExpirationDate(databaseCode.expiresAt)) {
         return false
@@ -114,7 +108,7 @@ export const user = {
       await db
         .delete(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.userId, userId))
-        .all()
+
       const tokenId = generateIdFromEntropySize(25) // 40 character
       const tokenHash = encodeHex(
         await sha256(new TextEncoder().encode(tokenId)),
@@ -126,18 +120,18 @@ export const user = {
       })
       return tokenId
     },
-    getToken: async function (token: string) {
+    getToken:  function (token: string) {
       return db
         .select()
         .from(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.token_hash, token))
         .limit(1)
     },
-    deleteToken: async function (token: string) {
-      return db
+    deleteToken:  function (token: string) {
+      return  db
         .delete(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.token_hash, token))
-        .run()
+      
     },
     alterPassword: async function (
       password: unknown,
@@ -398,7 +392,6 @@ export const user = {
               email,
               emailVerified: false,
               password_hash: passwordHash,
-              
             })
             .returning()
 
@@ -409,7 +402,7 @@ export const user = {
           }
         } catch (e) {
           if (
-            e instanceof LibsqlError &&
+            e instanceof PostgresError &&
             e.code === 'SQLITE_CONSTRAINT_UNIQUE'
           ) {
             return {
@@ -456,7 +449,7 @@ export const user = {
           }
         } catch (e) {
           if (
-            e instanceof LibsqlError &&
+            e instanceof PostgresError &&
             e.code === 'SQLITE_CONSTRAINT_UNIQUE'
           ) {
             return {
@@ -475,14 +468,13 @@ export const user = {
       },
     },
   },
-  
 }
 
 async function createMagicLinkToken(
   userId: string,
   email: string,
 ): Promise<string> {
-  await db.delete(magicLinkTable).where(eq(magicLinkTable.userId, userId)).all()
+  await db.delete(magicLinkTable).where(eq(magicLinkTable.userId, userId))
   const tokenId = generateIdFromEntropySize(25) // 40 characters long
   await db.insert(magicLinkTable).values({
     id: tokenId,
@@ -502,5 +494,5 @@ async function getMagicLinkToken(token: string) {
 }
 
 async function deleteMagicLinkToken(token: string) {
-  return db.delete(magicLinkTable).where(eq(magicLinkTable.id, token)).run()
+  return db.delete(magicLinkTable).where(eq(magicLinkTable.id, token))
 }

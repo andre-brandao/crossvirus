@@ -1,42 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  sqliteTable,
+  pgTable,
+  json,
+  timestamp,
+  time,
   text,
   integer,
-
+  boolean,
+  serial,
   // customType,
-} from 'drizzle-orm/sqlite-core'
+} from 'drizzle-orm/pg-core'
 import { relations, sql } from 'drizzle-orm'
-import { addressTable, customerOrderTable } from '$db/schema'
 
 import { generateId, type DatabaseUser } from 'lucia'
 
 export const userRoleEnum = ['customer', 'admin'] as const
 export type UserRole = (typeof userRoleEnum)[number]
-export const userTable = sqliteTable('user', {
+export const userTable = pgTable('user', {
   id: text('id')
     .notNull()
     .primaryKey()
     .$defaultFn(() => generateId(15)),
-  created_at: integer('created_at', { mode: 'timestamp' }).default(
-    sql`(CURRENT_TIMESTAMP)`,
-  ),
+  created_at: timestamp('created_at').notNull().defaultNow(),
   role: text('role', { enum: userRoleEnum }).default('customer'),
   name: text('name'),
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
-  emailVerified: integer('email_verified', { mode: 'boolean' })
-    .notNull()
-    .default(false),
+  emailVerified: boolean('email_verified').notNull().default(false),
   phone: text('phone'),
-  phoneVerified: integer('phone_verified', { mode: 'boolean' }),
+  phoneVerified: boolean('phone_verified'),
 
-  hasSubscription: integer('has_subscription', { mode: 'boolean' }).default(
-    false,
-  ),
+  hasSubscription: boolean('has_subscription').default(false),
 
   password_hash: text('password_hash'),
-  meta: text('meta', { mode: 'json' }),
+  meta: json('meta').default({}),
 })
 
 export type SelectUser = typeof userTable.$inferSelect
@@ -57,7 +54,7 @@ export interface DUser {
 }
 
 // AUTH TABLES
-export const sessionTable = sqliteTable('auth_session', {
+export const sessionTable = pgTable('auth_session', {
   id: text('id').notNull().primaryKey(),
   userId: text('user_id')
     .notNull()
@@ -67,8 +64,8 @@ export const sessionTable = sqliteTable('auth_session', {
   expiresAt: integer('expires_at').notNull(),
 })
 
-export const userVerificationCodeTable = sqliteTable('auth_verification_code', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+export const userVerificationCodeTable = pgTable('auth_verification_code', {
+  id: serial('id').primaryKey(),
   code: text('code').notNull(),
   userId: text('user_id')
     .notNull()
@@ -76,20 +73,23 @@ export const userVerificationCodeTable = sqliteTable('auth_verification_code', {
       onDelete: 'cascade',
     }),
   email: text('email').notNull(),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: timestamp('expires_at', {
+    mode: 'date',
+    withTimezone: true,
+  }).notNull(),
 })
 
-export const passwordResetCodeTable = sqliteTable('auth_password_reset_code', {
+export const passwordResetCodeTable = pgTable('auth_password_reset_code', {
   token_hash: text('token_hash').notNull(),
   userId: text('user_id')
     .notNull()
     .references(() => userTable.id, {
       onDelete: 'cascade',
     }),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
 })
 
-export const magicLinkTable = sqliteTable('auth_magic_link', {
+export const magicLinkTable = pgTable('auth_magic_link', {
   id: text('id').notNull().primaryKey(),
   userId: text('user_id')
     .notNull()
@@ -97,5 +97,5 @@ export const magicLinkTable = sqliteTable('auth_magic_link', {
       onDelete: 'cascade',
     }),
   email: text('email').notNull(),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
 })

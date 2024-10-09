@@ -1,19 +1,19 @@
 export const website = {
   author: 'André Brandão',
-  siteTitle: 'Deds Template',
-  siteShortTitle: 'Deds',
-  description: 'A simple template for Deds',
+  siteTitle: 'CrossVirus AI',
+  siteShortTitle: 'CrossVirus',
+  description: 'Sofware de análise de dados para combate ao COVID-19, Dengue, Zika entre outras doenças.',
 
   entity: 'Deds',
 
   ogLanguage: 'en',
   siteLanguage: 'en',
 
-  siteUrl: 'https://andrebrandao.dev',
+  siteUrl: 'https://crossvirus.com.br',
 
   defaultTheme: '',
 
-  contactEmail: 'eu@andrebrandao.dev',
+  contactEmail: 'suporte@crossgeo.com.br',
 
   // Social media links
   githubPage: '',
