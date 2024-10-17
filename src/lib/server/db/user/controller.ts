@@ -475,7 +475,7 @@ async function createMagicLinkToken(
   email: string,
 ): Promise<string> {
   await db.delete(magicLinkTable).where(eq(magicLinkTable.userId, userId))
-  const tokenId = generateIdFromEntropySize(25) // 40 characters long
+  const tokenId = generateId(40) // 40 characters long
   await db.insert(magicLinkTable).values({
     id: tokenId,
     userId,
