@@ -10,11 +10,11 @@ import {
   serial,
   // customType,
 } from 'drizzle-orm/pg-core'
+import { cityTable } from '$db/schema'
 import { relations, sql } from 'drizzle-orm'
 import { generateId } from '$lib/server/auth/sessions'
 
-
-export const userRoleEnum = ['customer', 'admin'] as const
+export const userRoleEnum = ['citzen', 'city_employee', 'admin'] as const
 export type UserRole = (typeof userRoleEnum)[number]
 export const userTable = pgTable('user', {
   id: text('id')
@@ -22,16 +22,15 @@ export const userTable = pgTable('user', {
     .primaryKey()
     .$defaultFn(() => generateId(15)),
   created_at: timestamp('created_at').notNull().defaultNow(),
-  role: text('role', { enum: userRoleEnum }).default('customer'),
+  role: text('role', { enum: userRoleEnum }).default('citzen'),
+  cityId: integer('city_id').references(() => cityTable.id),
   name: text('name'),
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
   phone: text('phone'),
   phoneVerified: boolean('phone_verified'),
-
   hasSubscription: boolean('has_subscription').default(false),
-
   password_hash: text('password_hash'),
   meta: json('meta').default({}),
 })

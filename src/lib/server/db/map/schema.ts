@@ -24,7 +24,7 @@ export const mapTable = pgTable('map', {
   created_at: timestamp('created_at').notNull().defaultNow(),
   created_by: text('created_by').notNull(),
   public: boolean('public').default(false),
-  city_id: integer('city_id').references(() => citiesTable.id),
+  city_id: integer('city_id').references(() => cityTable.id),
   name: text('name'),
   center: geometry('center', {
     type: 'point',
@@ -33,7 +33,8 @@ export const mapTable = pgTable('map', {
   }).notNull(), // #TODO: give default value
   zoom: integer('zoom').notNull(), // #TODO: give default value
 })
-
+export type InsertMap = typeof mapTable.$inferInsert
+export type SelectMap = typeof mapTable.$inferSelect
 export const mapLayerTable = pgTable(
   'map_layer',
   {
@@ -53,10 +54,11 @@ export const mapLayerTable = pgTable(
 
 //  -----------------------------
 
-export const citiesTable = pgTable('cities', {
+export const cityTable = pgTable('cities', {
   id: serial('id').notNull().primaryKey(),
   verified: boolean('verified').default(false),
   name: text('name').notNull(),
+  country: text('country').notNull(),
   location: geometry('location', {
     type: 'point',
     mode: 'xy',
@@ -67,5 +69,5 @@ export const citiesTable = pgTable('cities', {
   density: integer('density'),
 })
 
-
-export type SelectCity = typeof citiesTable.$inferSelect
+export type InsertCity = typeof cityTable.$inferInsert
+export type SelectCity = typeof cityTable.$inferSelect

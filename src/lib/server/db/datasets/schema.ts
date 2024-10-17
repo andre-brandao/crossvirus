@@ -16,15 +16,17 @@ import {
   // customType,
 } from 'drizzle-orm/pg-core'
 import { relations, sql } from 'drizzle-orm'
-import { citiesTable } from '../map/schema'
+import { userTable, cityTable } from '$db/schema'
 
 export const dataSetTable = pgTable(
   'dataset',
   {
     id: serial('id').notNull().primaryKey(),
     created_at: timestamp('created_at').notNull().defaultNow(),
-    created_by: text('created_by').notNull(),
-    city_id: integer('city_id').references(() => citiesTable.id),
+    created_by: text('created_by')
+      .references(() => userTable.id)
+      .notNull(),
+    city_id: integer('city_id').references(() => cityTable.id),
     public: boolean('public').default(false),
     name: text('name'),
     disease: text('disease'),
@@ -65,15 +67,15 @@ export const dataRowTable = pgTable(
   }),
 )
 
-export const dataChartsTable = pgTable('data_chart', {
-  id: serial('id').notNull().primaryKey(),
-  created_at: timestamp('created_at').notNull().defaultNow(),
-  datasetId: integer('dataset_id')
-    .notNull()
-    .references(() => dataSetTable.id),
-  name: text('name'),
-  type: text('type', { enum: ['line', 'bar', 'pie'] }).notNull(),
-  // TODO: add query type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filters: json('filters').notNull().$type<{ label: string; query: any }[]>(),
-})
+// export const dataChartsTable = pgTable('data_chart', {
+//   id: serial('id').notNull().primaryKey(),
+//   created_at: timestamp('created_at').notNull().defaultNow(),
+//   datasetId: integer('dataset_id')
+//     .notNull()
+//     .references(() => dataSetTable.id),
+//   name: text('name'),
+//   type: text('type', { enum: ['line', 'bar', 'pie'] }).notNull(),
+//   // TODO: add query type
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   filters: json('filters').notNull().$type<{ label: string; query: any }[]>(),
+// })

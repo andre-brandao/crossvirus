@@ -1,79 +1,56 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { relations } from 'drizzle-orm'
-import {
-  userTable,
-  addressTable,
-  customerOrderTable,
-  productCategoryTable,
-  productItemTable,
-  productTable,
-  orderItemTable,
-} from './schema'
 
-export const userRelations = relations(userTable, ({ one, many }) => ({
-  addresses: many(addressTable),
-  orders: many(customerOrderTable),
+import * as s from './schema'
+
+export const dataSetRelations = relations(s.dataSetTable, ({ one, many }) => ({
+  rows: many(s.dataRowTable),
+  made_by: one(s.userTable),
+  city: one(s.cityTable, {
+    fields: [s.dataSetTable.city_id],
+    references: [s.cityTable.id],
+  }),
+  layer: many(s.mapLayerTable),
 }))
 
-export const productRelations = relations(productTable, ({ one, many }) => ({
-  category: one(productCategoryTable, {
-    fields: [productTable.category_id],
-    references: [productCategoryTable.id],
+export const dataRowRelations = relations(s.dataRowTable, ({ one }) => ({
+  dataset: one(s.dataSetTable, {
+    fields: [s.dataRowTable.datasetId],
+    references: [s.dataSetTable.id],
   }),
-  items: many(productItemTable),
 }))
 
-export const productItemRelations = relations(
-  productItemTable,
-  ({ one, many }) => ({
-    product: one(productTable, {
-      fields: [productItemTable.product_id],
-      references: [productTable.id],
-    }),
-    orders: many(orderItemTable),
+export const mapRelations = relations(s.mapTable, ({ one, many }) => ({
+  layers: many(s.mapLayerTable),
+  made_by: one(s.userTable),
+  city: one(s.cityTable, {
+    fields: [s.mapTable.city_id],
+    references: [s.cityTable.id],
   }),
-)
-
-export const productCategoryRelations = relations(
-  productCategoryTable,
-  ({ one, many }) => ({
-    products: many(productTable),
-  }),
-)
-
-export const addressRelations = relations(addressTable, ({ one, many }) => ({
-  customer: one(userTable, {
-    fields: [addressTable.user_id],
-    references: [userTable.id],
-  }),
-  orders: many(customerOrderTable),
 }))
 
-export const customerOrderRelations = relations(
-  customerOrderTable,
-  ({ one, many }) => ({
-    customer: one(userTable, {
-      fields: [customerOrderTable.user_id],
-      references: [userTable.id],
-    }),
-    address: one(addressTable, {
-      fields: [customerOrderTable.address_id],
-      references: [addressTable.id],
-    }),
-    items: many(orderItemTable),
+export const mapLayerRelations = relations(s.mapLayerTable, ({ one }) => ({
+  map: one(s.mapTable, {
+    fields: [s.mapLayerTable.map_id],
+    references: [s.mapTable.id],
   }),
-)
+  dataset: one(s.dataSetTable, {
+    fields: [s.mapLayerTable.layer_id],
+    references: [s.dataSetTable.id],
+  }),
+}))
 
-export const orderItemRelations = relations(
-  orderItemTable,
-  ({ one, many }) => ({
-    order: one(customerOrderTable, {
-      fields: [orderItemTable.order_id],
-      references: [customerOrderTable.id],
-    }),
-    product: one(productItemTable, {
-      fields: [orderItemTable.product_id],
-      references: [productItemTable.id],
-    }),
+export const cityRelations = relations(s.cityTable, ({ many }) => ({
+  datasets: many(s.dataSetTable),
+  maps: many(s.mapTable),
+  users: many(s.userTable),
+}))
+
+export const userRelations = relations(s.userTable, ({ many, one }) => ({
+  datasets: many(s.dataSetTable),
+  maps: many(s.mapTable),
+  citiy: one(s.cityTable, {
+    fields: [s.userTable.cityId],
+    references: [s.cityTable.id],
   }),
-)
+}))

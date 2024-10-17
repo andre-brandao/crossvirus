@@ -24,37 +24,20 @@ bun install
 ## Libraries docs
 
 - [DaisyUI](https://daisyui.com/components/) component library
-- [SvelteAnimations](https://animation-svelte.vercel.app/) component library
 - [Tailwind](https://tailwindcomponents.com/cheatsheet/) css classes but simple
   sometimes too simple
 - [Drizzle](https://orm.drizzle.team/) sql orm
-- [Lucia Auth](https://lucia-auth.com/) auth helper for sessions
 - [TRPC](https://trpc.io/docs) typesafe api
 - [TRPC SvelteKit](https://icflorescu.github.io/trpc-sveltekit/) trpc svelte
   adapter
 - [Zod](https://zod.dev/) Type Validations
 - [LayerCHart](https://www.layerchart.com/) Beutiful Charts
-
 - [Svelte5](https://svelte-5-preview.vercel.app/docs/introduction)
 - [SvelteKit](https://kit.svelte.dev/docs/introduction)
 - [Svelte Tutorial](https://learn.svelte.dev/tutorial/introducing-sveltekit)
 
 ## Project Structure
 
-Briefly explain the main directories and files in your project:
-
-- src/: Source code for your application.
-- src/routes/: SvelteKit routes.
-- src/lib/: Reusable modules and components.
-- src/lib/components: UI Components.
-- src/lib/paraglide: Translations for the app (in gitignore).
-- src/lib/stores: Aplication stores (global state).
-- src/lib/utils: Utils for many things
-- src/lib/server/db/: Database-related scripts and schema.
-- src/assets: Static Assets
-- src/trpc: Server side trpc routes
-- messages: translation definition
-- migrations: sql migrations
 
 ## Developing
 
@@ -73,9 +56,12 @@ To create a production version of your app:
 npm run build
 ```
 
-## Testing
 
-TODO
+## DB
+Run Local DB
+```bash
+docker compose up
+```
 
 ## Drizzle
 
