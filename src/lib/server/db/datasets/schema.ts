@@ -35,13 +35,19 @@ export const dataSetTable = pgTable(
         { latField: string; longField: string } | { addressField: string }
       >(),
     fields: text('fileds').array().notNull(),
-    center: geometry('center').notNull(), // #TODO: give default value
+    center: geometry('center', {
+      type: 'point',
+      mode: 'xy',
+      srid: 4326,
+    }).notNull(), // #TODO: give default value
     zoom: integer('zoom').notNull(), // #TODO: give default value
   },
   t => ({
     disease_index: index('disease_index').on(t.disease),
   }),
 )
+export type SelectDataset = typeof dataSetTable.$inferSelect
+export type InsertDataset = typeof dataSetTable.$inferInsert
 
 export const dataRowTable = pgTable(
   'data_row',
@@ -52,7 +58,7 @@ export const dataRowTable = pgTable(
       .notNull()
       .references(() => dataSetTable.id),
     data: json('data').notNull().$type<Record<string, unknown>>(),
-    latLong: geometry('lat_long'),
+    latLong: geometry('lat_long', { type: 'point', mode: 'xy', srid: 4326 }),
   },
   t => ({
     spatialIndex: index('spatial_index').using('gist', t.latLong),

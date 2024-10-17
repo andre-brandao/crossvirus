@@ -11,8 +11,8 @@ import {
   // customType,
 } from 'drizzle-orm/pg-core'
 import { relations, sql } from 'drizzle-orm'
+import { generateId } from '$lib/server/auth/sessions'
 
-import { generateId, type DatabaseUser } from 'lucia'
 
 export const userRoleEnum = ['customer', 'admin'] as const
 export type UserRole = (typeof userRoleEnum)[number]
@@ -39,20 +39,6 @@ export const userTable = pgTable('user', {
 export type SelectUser = typeof userTable.$inferSelect
 export type InsertUser = typeof userTable.$inferInsert
 
-// import { generateId } from 'lucia'
-export interface DUser {
-  id: string
-  role: UserRole
-  name: string
-  username: string
-  email: string
-  emailVerified: boolean
-  phone: string
-  phoneVerified: boolean
-  hasSubscription: boolean
-  meta: JSON
-}
-
 // AUTH TABLES
 export const sessionTable = pgTable('auth_session', {
   id: text('id').notNull().primaryKey(),
@@ -61,9 +47,13 @@ export const sessionTable = pgTable('auth_session', {
     .references(() => userTable.id, {
       onDelete: 'cascade',
     }),
-  expiresAt: integer('expires_at').notNull(),
+  expiresAt: timestamp('expires_at', {
+    mode: 'date',
+    withTimezone: true,
+  }).notNull(),
 })
 
+export type SelectSession = typeof sessionTable.$inferSelect
 export const userVerificationCodeTable = pgTable('auth_verification_code', {
   id: serial('id').primaryKey(),
   code: text('code').notNull(),

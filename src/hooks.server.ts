@@ -1,34 +1,27 @@
 import { i18n } from '$lib/i18n/i18n'
-import { lucia } from '$lib/server/auth'
+import { sessionsC } from '$lib/server/auth/sessions'
+import {
+  setSessionTokenCookie,
+  deleteSessionTokenCookie,
+} from '$lib/server/auth/cookies'
 import type { Handle } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
 import { bugReport } from '$db/controller'
 
 const handleSession: Handle = async ({ event, resolve }) => {
-  const sessionId = event.cookies.get(lucia.sessionCookieName)
+  const sessionId = event.cookies.get('session')
   if (!sessionId) {
     event.locals.user = null
     event.locals.session = null
     return resolve(event)
   }
 
-  const { session, user } = await lucia.validateSession(sessionId)
-  if (session && session.fresh) {
-    const sessionCookie = lucia.createSessionCookie(session.id)
-    // sveltekit types deviates from the de-facto standard
-    // you can use 'as any' too
-    event.cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: '.',
-      ...sessionCookie.attributes,
-    })
-  }
-  if (!session) {
-    const sessionCookie = lucia.createBlankSessionCookie()
-    event.cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: '.',
-      ...sessionCookie.attributes,
-    })
+  const { session, user } = await sessionsC.validateSessionToken(sessionId)
+  if (session !== null) {
+    setSessionTokenCookie(event, sessionId, session.expiresAt)
+  } else {
+    deleteSessionTokenCookie(event)
   }
   event.locals.user = user
   event.locals.session = session

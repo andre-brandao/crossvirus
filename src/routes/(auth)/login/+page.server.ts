@@ -1,10 +1,14 @@
-// import { lucia } from '$lib/server/auth'
 import { fail, redirect } from '@sveltejs/kit'
 
 import type { Actions, PageServerLoad } from './$types'
 
 import { user } from '$db/controller'
-import { lucia } from '$lib/server/auth'
+import { sessionsC } from '$lib/server/auth/sessions'
+import {
+  deleteSessionTokenCookie,
+  
+} from '$lib/server/auth/cookies'
+
 // import { emailTemplate, sendMail } from '$lib/server/email'
 
 export const load: PageServerLoad = async event => {
@@ -37,7 +41,8 @@ export const actions: Actions = {
       message: 'Magic link sent, Check your email',
     }
   },
-  logout: async ({ locals, cookies }) => {
+  logout: async event => {
+    const { locals } = event
     console.log('logout')
 
     const { session } = locals
@@ -45,12 +50,8 @@ export const actions: Actions = {
     if (!session) {
       return redirect(302, '/login')
     }
-    await lucia.invalidateSession(session.id)
-    const sessionCookie = lucia.createBlankSessionCookie()
-    cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: '.',
-      ...sessionCookie.attributes,
-    })
+    await sessionsC.invalidateSession(session.id)
+    deleteSessionTokenCookie(event)
 
     return redirect(302, '/login')
   },

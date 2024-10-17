@@ -1,9 +1,14 @@
 import type { PageServerLoad } from './$types'
-import { lucia } from '$lib/server/auth'
+import { sessionsC } from '$lib/server/auth/sessions'
+import {
+  
+  setSessionTokenCookie,
+} from '$lib/server/auth/cookies'
 import { user } from '$db/controller'
 import { error, redirect } from '@sveltejs/kit'
 
-export const load = (async ({ params, cookies, setHeaders }) => {
+export const load = (async event => {
+  const { params, setHeaders } = event
   const verificationToken = params.token
 
   setHeaders({
@@ -22,18 +27,16 @@ export const load = (async ({ params, cookies, setHeaders }) => {
   const verifiedUser = data.user
 
   try {
-    await lucia.invalidateUserSessions(verifiedUser.id)
+    await sessionsC.invalidateUserSessions(verifiedUser.id)
 
     await user.update(verifiedUser.id, {
       emailVerified: true,
     })
 
-    const session = await lucia.createSession(verifiedUser.id, {})
-    const sessionCookie = lucia.createSessionCookie(session.id)
-    cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: '.',
-      ...sessionCookie.attributes,
-    })
+    const token = sessionsC.generateSessionToken()
+    const session = await sessionsC.createSession(token, verifiedUser.id)
+    setSessionTokenCookie(event, token, session.expiresAt)
+
   } catch (e) {
     console.error(e)
     return error(500, {

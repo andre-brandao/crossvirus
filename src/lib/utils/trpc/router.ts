@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { publicProcedure, t } from './t'
+import { procedure, t } from './t'
 
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
 // ROUTES
 import { userRouter } from '$db/user/router'
-import { productRouter } from '$db/product/router'
-import { customerRouter } from '$db/customer/router'
-import { bugReportRouter } from '$db/bug-report/router'
 
+//  RPC = REMOTE PROCCEDURE CALL
+// TRPC = TS REMOTE PROCCEDURE CALL
+// GRPC = GOOGLE REMOTE PROCCEDURE CALL
 
 export const router = t.router({
   auth: userRouter,
-  product: productRouter,
-  customer: customerRouter,
-  bugReport: bugReportRouter,
 })
 
 export type Router = typeof router

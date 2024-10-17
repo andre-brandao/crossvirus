@@ -1,17 +1,15 @@
-import { publicProcedure, router } from '$trpc/t'
+import { procedure, router } from '$trpc/t'
 
 import { z } from 'zod'
 
 import { user as userController } from '$db/controller'
-import { lucia } from '$lib/server/auth'
-
-// import { generateId } from 'lucia'
-// import { LibsqlError } from '@libsql/client'
+import { sessionsC } from '$lib/server/auth/sessions'
 
 import { emailTemplate, sendMail } from '$lib/server/services/email'
+import { setSessionTokenCookie } from '$lib/server/auth/cookies'
 
 export const userRouter = router({
-  resendEmailVerification: publicProcedure.query(async ({ ctx }) => {
+  resendEmailVerification: procedure.query(async ({ ctx }) => {
     const { locals } = ctx
 
     const localUser = locals.user
@@ -35,14 +33,14 @@ export const userRouter = router({
       message: 'Verification email sent',
     }
   }),
-  verifyEmail: publicProcedure
+  verifyEmail: procedure
     .input(
       z.object({
         code: z.string().length(8),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { cookies, locals } = ctx
+      const {  locals } = ctx
       const sessionId = locals.session?.id
       const { code } = input
 
@@ -53,7 +51,7 @@ export const userRouter = router({
         }
       }
 
-      const { user } = await lucia.validateSession(sessionId)
+      const { user } = await sessionsC.validateSessionToken(sessionId)
       if (!user) {
         return {
           error: 'Not authenticated',
@@ -70,17 +68,15 @@ export const userRouter = router({
         }
       }
 
-      await lucia.invalidateUserSessions(user.id)
+      await sessionsC.invalidateUserSessions(user.id)
       await userController.update(user.id, {
         emailVerified: true,
       })
 
-      const session = await lucia.createSession(user.id, {})
-      const sessionCookie = lucia.createSessionCookie(session.id)
-      cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: '.',
-        ...sessionCookie.attributes,
-      })
+      const token = sessionsC.generateSessionToken()
+      const session = await sessionsC.createSession(token, user.id)
+      setSessionTokenCookie(ctx, token, session.expiresAt)
+     
 
       return {
         data: {
@@ -90,7 +86,7 @@ export const userRouter = router({
         error: null,
       }
     }),
-  resetPassword: publicProcedure
+  resetPassword: procedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ input, ctx }) => {
       const { email } = input

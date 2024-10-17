@@ -1,11 +1,10 @@
 // USER
 export * from './user/schema'
 
-// export * from './image/schema'
-
+// MAPAS
+export * from './map/schema'
+export * from './datasets/schema'
 
 // export * from './bug-report'
 
-
-
-// export * from './relations'
+export * from './relations'

@@ -5,7 +5,8 @@ import { sha256 } from 'oslo/crypto'
 import { encodeHex } from 'oslo/encoding'
 
 import { user } from '$db/controller'
-import { lucia } from '$lib/server/auth'
+import { sessionsC } from '$lib/server/auth/sessions'
+import { setSessionTokenCookie } from '$lib/server/auth/cookies'
 
 export const load = (async ({ params, setHeaders }) => {
   const verificationToken = params.token
@@ -30,7 +31,8 @@ export const load = (async ({ params, setHeaders }) => {
 }) satisfies PageServerLoad
 
 export const actions: Actions = {
-  default: async ({ request, params, cookies, setHeaders }) => {
+  default: async event => {
+    const { request, params, setHeaders } = event
     const formData = await request.formData()
     const password = formData.get('password')
 
@@ -53,15 +55,11 @@ export const actions: Actions = {
     }
 
     const userId = data.userId
-    await lucia.invalidateUserSessions(userId)
+    await sessionsC.invalidateUserSessions(userId)
 
-    const session = await lucia.createSession(userId, {})
-    const sessionCookie = lucia.createSessionCookie(session.id)
-    cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: '.',
-      ...sessionCookie.attributes,
-    })
-
+    const token = sessionsC.generateSessionToken()
+    const session = await sessionsC.createSession(token, userId)
+    setSessionTokenCookie(event, token, session.expiresAt)
     return redirect(302, '/myprofile')
   },
 }

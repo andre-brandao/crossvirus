@@ -26,7 +26,11 @@ export const mapTable = pgTable('map', {
   public: boolean('public').default(false),
   city_id: integer('city_id').references(() => citiesTable.id),
   name: text('name'),
-  center: geometry('center').notNull(), // #TODO: give default value
+  center: geometry('center', {
+    type: 'point',
+    mode: 'xy',
+    srid: 4326,
+  }).notNull(), // #TODO: give default value
   zoom: integer('zoom').notNull(), // #TODO: give default value
 })
 
@@ -47,16 +51,21 @@ export const mapLayerTable = pgTable(
   }),
 )
 
-
-
 //  -----------------------------
 
 export const citiesTable = pgTable('cities', {
-    id: serial('id').notNull().primaryKey(),
-    verified: boolean('verified').default(false),
-    name: text('name').notNull(),
-    location: geometry('location'),
-    population: integer('population'),
-    area: integer('area'),
-    density: integer('density'),
+  id: serial('id').notNull().primaryKey(),
+  verified: boolean('verified').default(false),
+  name: text('name').notNull(),
+  location: geometry('location', {
+    type: 'point',
+    mode: 'xy',
+    srid: 4326,
+  }),
+  population: integer('population'),
+  area: integer('area'),
+  density: integer('density'),
 })
+
+
+export type SelectCity = typeof citiesTable.$inferSelect

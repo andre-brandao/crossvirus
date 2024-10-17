@@ -14,11 +14,12 @@ import {
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo'
 import { generateRandomString, alphabet, sha256 } from 'oslo/crypto'
 import { encodeHex } from 'oslo/encoding'
-import { generateIdFromEntropySize, type User } from 'lucia'
 // import { hash, verify } from '@node-rs/argon2'
 import { hash, verify } from './password'
 
 import { emailTemplate, sendMail } from '$lib/server/services/email'
+
+import { generateId } from '$lib/server/auth/sessions'
 
 export function isValidEmail(email: string): boolean {
   return /.+@.+/.test(email)
@@ -81,7 +82,7 @@ export const user = {
       })
       return code
     },
-    verify: async function (user: User, code: string): Promise<boolean> {
+    verify: async function (user: SelectUser, code: string): Promise<boolean> {
       const [databaseCode] = await db
         .select()
         .from(userVerificationCodeTable)
@@ -109,7 +110,7 @@ export const user = {
         .delete(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.userId, userId))
 
-      const tokenId = generateIdFromEntropySize(25) // 40 character
+      const tokenId = generateId(40) // 40 character
       const tokenHash = encodeHex(
         await sha256(new TextEncoder().encode(tokenId)),
       )
@@ -120,18 +121,17 @@ export const user = {
       })
       return tokenId
     },
-    getToken:  function (token: string) {
+    getToken: function (token: string) {
       return db
         .select()
         .from(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.token_hash, token))
         .limit(1)
     },
-    deleteToken:  function (token: string) {
-      return  db
+    deleteToken: function (token: string) {
+      return db
         .delete(passwordResetCodeTable)
         .where(eq(passwordResetCodeTable.token_hash, token))
-      
     },
     alterPassword: async function (
       password: unknown,

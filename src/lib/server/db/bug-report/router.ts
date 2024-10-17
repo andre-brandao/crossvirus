@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '$trpc/t'
+import { procedure, router } from '$trpc/t'
 
 import { z } from 'zod'
 import { bugReport } from '$db/controller'
@@ -6,7 +6,7 @@ import { TRPCError } from '@trpc/server'
 import { middleware } from '$trpc/middleware'
 
 export const bugReportRouter = router({
-  reportBug: publicProcedure
+  reportBug: procedure
     .input(
       z.object({
         text: z.string(),
@@ -46,7 +46,7 @@ export const bugReportRouter = router({
       }
     }),
 
-  updateBugStatus: publicProcedure
+  updateBugStatus: procedure
     .use(middleware.admin)
     .input(
       z.object({
