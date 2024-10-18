@@ -12,7 +12,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import { cityTable } from '$db/schema'
 import { relations, sql } from 'drizzle-orm'
-import { generateId } from '$lib/server/auth/sessions'
+import { generateId } from '$lib/server/auth/utils'
 
 export const userRoleEnum = ['citzen', 'city_employee', 'admin'] as const
 export type UserRole = (typeof userRoleEnum)[number]

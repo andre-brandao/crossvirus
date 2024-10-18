@@ -5,7 +5,10 @@ import * as s from './schema'
 
 export const dataSetRelations = relations(s.dataSetTable, ({ one, many }) => ({
   rows: many(s.dataRowTable),
-  made_by: one(s.userTable),
+  made_by: one(s.userTable, {
+    fields: [s.dataSetTable.created_by],
+    references: [s.userTable.id],
+  }),
   city: one(s.cityTable, {
     fields: [s.dataSetTable.city_id],
     references: [s.cityTable.id],
@@ -22,7 +25,10 @@ export const dataRowRelations = relations(s.dataRowTable, ({ one }) => ({
 
 export const mapRelations = relations(s.mapTable, ({ one, many }) => ({
   layers: many(s.mapLayerTable),
-  made_by: one(s.userTable),
+  made_by: one(s.userTable, {
+    fields: [s.mapTable.created_by],
+    references: [s.userTable.id],
+  }),
   city: one(s.cityTable, {
     fields: [s.mapTable.city_id],
     references: [s.cityTable.id],
