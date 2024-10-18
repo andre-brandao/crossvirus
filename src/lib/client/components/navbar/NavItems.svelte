@@ -34,45 +34,14 @@
       icon: icons.home(),
     },
     {
-      name: 'Products',
-      href: '/products',
+      name: 'Mapas',
+      href: '/map',
     },
+    {
+      name: 'dataset',
+      href: '/dataset'
+    }
   ]
-
-  if (showDefaultItems && $user?.role === 'admin') {
-    navItems.push({
-      name: 'Admin',
-      href: '/admin',
-      subItems: [
-        {
-          name: 'Products',
-          href: '/admin/products',
-          // icon: icons.cube(),
-        },
-        {
-          name: 'Users',
-          href: '/admin/users',
-          // icon: icons.users(),
-        },
-        {
-          name: 'Stock',
-          href: '/admin/stock',
-          // icon: icons.users(),
-        },
-        {
-          name: 'Customers',
-          href: '/admin/customer',
-          // icon: icons.users(),
-        },
-        {
-          name: 'Orders',
-          href: '/admin/orders',
-          icon: icons.cart(),
-          
-        },
-      ],
-    })
-  }
 
   function isActive(href?: string) {
     // TODO: Fix translation home not working

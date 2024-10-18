@@ -10,7 +10,7 @@
 
   <!-- Themes -->
   <div
-    class="dropdown-content z-10 mt-2 flex h-72 w-64 flex-col gap-2 overflow-y-scroll rounded-box bg-base-200 p-4 shadow-2xl"
+    class="dropdown-content z-10 mt-2 flex h-15 w-64 flex-col gap-2 overflow-y-scroll rounded-box bg-base-200 p-4 shadow-2xl"
   >
     {#each themes as theme}
       <button
