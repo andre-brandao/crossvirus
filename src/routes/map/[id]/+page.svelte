@@ -2,10 +2,9 @@
   import { icons } from '$lib/utils/icons'
   import Map from '$lib/client/components/map/Map.svelte'
   import ParsedTable from '$lib/client/components/table/ParsedTable.svelte'
-  import QueryChart from '$lib/client/components/chart/QueryChart.svelte'
+  // import QueryChart from '$lib/client/components/chart/QueryChart.svelte'
   import SvChartQuery from '$lib/client/components/SVChartQuery.svelte'
 
-  import Vonoroi from '$lib/client/components/chart/Voronoi.svelte'
   import type { Dataset } from '$lib/client/components/map/dataset'
   import EditChart from './EditChart.svelte'
   import L from 'leaflet'
@@ -29,14 +28,21 @@
   let isMapActive = true
   let isChartActive = true
 
-  let locations = map.map_data[0].data.points.map(p => ({
-    latLong: new L.LatLng(p.lat, p.long),
-    metadata: p.meta_data,
-  }))
+  let locations = map.layers[0].dataset.rows
+    .filter(p => p.latLong !== null)
+    .map(p => ({
+      latLong: new L.LatLng(p.latLong.x, p.latLong.y),
+      metadata: p.data,
+    }))
 
+  const initialLocation = [map.center.x ?? 1, map.center.y ?? 1] as [
+    number,
+    number,
+  ]
+  let initailZoom = map.zoom ?? 12
   let filtered_data = locations.map(l => l.metadata).filter(l => l !== null)
 
-  let charts = map.map_data[0].data.charts
+  // let charts = map.layers[0].dataset.
 
   function handleLassoSelected(e: Dataset) {
     console.log('lasso_selected', e)
@@ -55,109 +61,109 @@
     if (!confirm('Are you sure you want to delete this chart?')) {
       return
     }
-    try {
-      await trpc($page).map.deleteChart.mutate({
-        id,
-      })
+    // try {
+    //   await trpc($page).map.deleteChart.mutate({
+    //     id,
+    //   })
 
-      toast.success('Chart deleted')
-      charts = charts.filter(c => c.id !== id)
-    } catch (error: any) {
-      toast.error(error.message)
-      return
-    }
+    //   toast.success('Chart deleted')
+    //   charts = charts.filter(c => c.id !== id)
+    // } catch (error: any) {
+    //   toast.error(error.message)
+    //   return
+    // }
   }
 
-  function handleEditChart(c: (typeof charts)[0]) {
-    modal.open(EditChart, {
-      chart: c,
-      dataset: {
-        headers: map.map_data[0].data.fields_info.fields,
-        rows: filtered_data,
-      },
-      save: async chart => {
-        console.log('save', chart)
+  // function handleEditChart(c: (typeof charts)[0]) {
+  //   modal.open(EditChart, {
+  //     chart: c,
+  //     dataset: {
+  //       headers: map.map_data[0].data.fields_info.fields,
+  //       rows: filtered_data,
+  //     },
+  //     save: async chart => {
+  //       console.log('save', chart)
 
-        if (chart.filters.length === 0) {
-          toast.error('Please select at least one filter')
-          return
-        }
-        if (!chart.title) {
-          toast.error('Please insert a title')
-          return
-        }
-        if (!chart.id) {
-          toast.error('Chart id not found')
-          return
-        }
+  //       if (chart.filters.length === 0) {
+  //         toast.error('Please select at least one filter')
+  //         return
+  //       }
+  //       if (!chart.title) {
+  //         toast.error('Please insert a title')
+  //         return
+  //       }
+  //       if (!chart.id) {
+  //         toast.error('Chart id not found')
+  //         return
+  //       }
 
-        try {
-          const [resp] = await trpc($page).map.updateChart.mutate({
-            id: chart.id,
-            chart: {
-              title: chart.title,
-              type: chart.type,
-              // @ts-ignore
-              filters: chart.filters,
-            },
-          })
+  //       // try {
+  //       //   const [resp] = await trpc($page).map.updateChart.mutate({
+  //       //     id: chart.id,
+  //       //     chart: {
+  //       //       title: chart.title,
+  //       //       type: chart.type,
+  //       //       // @ts-ignore
+  //       //       filters: chart.filters,
+  //       //     },
+  //       //   })
 
-          if (resp) {
-            toast.success('Chart updated')
-            // @ts-expect-error fail to infer type
-            charts = charts.map(c => (c.id === chart.id ? resp : c))
-            modal.close()
-            // window.location.reload()
-          }
-        } catch (error: any) {
-          console.log('error', error)
-          toast.error(error.message)
-        }
-      },
-    })
-  }
+  //       //   if (resp) {
+  //       //     toast.success('Chart updated')
+  //       //     // @ts-expect-error fail to infer type
+  //       //     charts = charts.map(c => (c.id === chart.id ? resp : c))
+  //       //     modal.close()
+  //       //     // window.location.reload()
+  //       //   }
+  //       // } catch (error: any) {
+  //       //   console.log('error', error)
+  //       //   toast.error(error.message)
+  //       // }
+  //     },
+  //   })
+  // }
 
-  function modalCreateNewChart() {
-    modal.open(EditChart, {
-      chart: {
-        title: m.new_chart(),
-        filters: [],
-        type: 'bar',
-      },
-      dataset: {
-        headers: map.map_data[0].data.fields_info.fields,
-        rows: filtered_data,
-      },
-      save: async chart => {
-        if (chart.filters.length === 0) {
-          toast.error('Please select at least one filter')
-          return
-        }
-        if (!chart.title) {
-          toast.error('Please insert a title')
-          return
-        }
+  // function modalCreateNewChart() {
+  //   modal.open(EditChart, {
+  //     chart: {
+  //       title: m.new_chart(),
+  //       filters: [],
+  //       type: 'bar',
+  //     },
+  //     dataset: {
+  //       headers: map.map_data[0].data.fields_info.fields,
+  //       rows: filtered_data,
+  //     },
+  //     save: async chart => {
+  //       if (chart.filters.length === 0) {
+  //         toast.error('Please select at least one filter')
+  //         return
+  //       }
+  //       if (!chart.title) {
+  //         toast.error('Please insert a title')
+  //         return
+  //       }
 
-        try {
-          const [resp] = await trpc($page).map.createChart.mutate({
-            data_id: map.map_data[0].data.id,
-            // @ts-ignore
-            filters: chart.filters,
-            title: chart.title,
-            type: chart.type,
-          })
+  //       try {
+  //         const [resp] = await trpc($page).map.createChart.mutate({
+  //           data_id: map.map_data[0].data.id,
+  //           // @ts-ignore
+  //           filters: chart.filters,
+  //           title: chart.title,
+  //           type: chart.type,
+  //         })
 
-          if (resp) {
-            // @ts-ignore
-            charts = [resp, ...charts]
-            modal.close()
-          }
-        } catch (error: any) {
-          toast.error(error.message)
-        }
-      },
-    })
-  }
+  //         if (resp) {
+  //           // @ts-ignore
+  //           charts = [resp, ...charts]
+  //           modal.close()
+  //         }
+  //       } catch (error: any) {
+  //         toast.error(error.message)
+  //       }
+  //     },
+  //   })
+  // }
 
   function canToggle(view: boolean) {
     const activeViews = [isTableActive, isMapActive, isChartActive].filter(
@@ -178,7 +184,7 @@
           }
         }}
       >
-      {@html icons.map()}
+        {@html icons.map()}
         <!-- {@html isMapActive ? icons.map() : icons.show()} -->
         <!-- {isMapActive ? m.hide_map() : m.show_map()} -->
       </button>
@@ -190,7 +196,7 @@
           }
         }}
       >
-      {@html icons.table()}
+        {@html icons.table()}
         <!-- {@html isTableActive ? icons.table() : icons.show()} -->
         <!-- {isTableActive ? m.hide_table() : m.show_table()} -->
       </button>
@@ -202,7 +208,7 @@
           }
         }}
       >
-      {@html icons.chart2()}
+        {@html icons.chart2()}
         <!-- {@html isChartActive ? icons.chart2() : icons.show()} -->
         <!-- {isChartActive ? m.hide_chart() : m.show_chart()} -->
       </button>
@@ -215,7 +221,7 @@
     </div>
 
     <div class="flex gap-2">
-      <button on:click={modalCreateNewChart} class="btn btn-primary">
+      <button class="btn btn-primary">
         {@html icons.chart2()}
         {m.create_new()}
       </button>
@@ -258,8 +264,8 @@
               /> -->
                 <Map
                   {locations}
-                  initailZoom={map.zoom ?? 12}
-                  initialLocation={[map.lat ?? 1, map.long ?? 1]}
+                  {initailZoom}
+                  {initialLocation}
                   lasso_selected={handleLassoSelected}
                 />
               </Pane>
@@ -348,7 +354,8 @@
           <div
             class="flex h-full w-full flex-wrap justify-center gap-5 overflow-y-scroll"
           >
-            {#if charts.length > 0}
+            still need to implement this part
+            <!-- {#if charts.length > 0}
               {#each charts as chart}
                 <div class="rounded-md">
                   <SvChartQuery
@@ -379,7 +386,7 @@
                   {m.to_create()}
                 </h1>
               </div>
-            {/if}
+            {/if} -->
           </div>
         </Pane>
       {/if}
