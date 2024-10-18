@@ -1,6 +1,6 @@
 import { fail } from '@sveltejs/kit'
 import type { PageServerLoad, Actions } from './$types'
-import { user } from '$db/controller'
+import { userC } from '$db/controller'
 import { emailTemplate, sendMail } from '$lib/server/services/email'
 
 export const load = (async () => {
@@ -24,7 +24,7 @@ export const actions: Actions = {
       })
     }
 
-    const [existingUser] = await user.getByEmail(email)
+    const [existingUser] = await userC.getByEmail(email)
 
     if (!existingUser) {
       return fail(400, {
@@ -32,7 +32,7 @@ export const actions: Actions = {
       })
     }
 
-    const verificationToken = await user.passwordRecovery.createToken(
+    const verificationToken = await userC.passwordRecovery.createToken(
       existingUser.id,
     )
     // const verificationLink =

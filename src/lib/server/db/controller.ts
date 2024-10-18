@@ -1,10 +1,5 @@
-// export { product } from './product/controller'
+export * from './user/controller'
 
-export { user } from './user/controller'
+export * from './datasets/controller'
 
-export { image } from './image/controller'
-
-export { bugReport } from './bug-report/controller'
-
-// export { customer } from './customer/controller'
-
+export * from './map/controller'

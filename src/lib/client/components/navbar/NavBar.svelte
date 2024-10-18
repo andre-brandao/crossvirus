@@ -1,8 +1,6 @@
 <script lang="ts">
-  
   import ThemeSwiter from './ThemeSwiter.svelte'
   import ChangeLanguage from './ChangeLanguage.svelte'
-  import Cart from './Cart.svelte'
 
   import { website } from '$lib/config'
 
@@ -15,7 +13,6 @@
   import { goto } from '$app/navigation'
 
   const user = getUserContext()
-
 </script>
 
 <div class="drawer">
@@ -78,10 +75,8 @@
             </ul>
           </div>
         {:else}
-          <a class="btn" href="/login">{@html icons.login()}Login</a>
+          <a class="btn" href="/login/password">{@html icons.login()}Login</a>
         {/if}
-
-        <Cart />
 
         <ThemeSwiter />
 

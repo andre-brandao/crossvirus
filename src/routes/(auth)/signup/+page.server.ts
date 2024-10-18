@@ -3,11 +3,10 @@ import { sessionsC } from '$lib/server/auth/sessions'
 import { setSessionTokenCookie } from '$lib/server/auth/cookies'
 import { fail, redirect } from '@sveltejs/kit'
 
-
 import type { Actions, PageServerLoad } from './$types'
 import { emailTemplate, sendMail } from '$lib/server/services/email'
 
-import { user } from '$db/controller'
+import { userC } from '$db/controller'
 
 export const load: PageServerLoad = async event => {
   if (event.locals.user) {
@@ -26,7 +25,7 @@ export const actions: Actions = {
     const city = formData.get('city')
     const country = formData.get('country')
 
-    const { data, error } = await user.auth.register.withPassword(
+    const { data, error } = await userC.auth.register.withPassword(
       username,
       email,
       password,
@@ -47,8 +46,8 @@ export const actions: Actions = {
     const token = sessionsC.generateSessionToken()
     const session = await sessionsC.createSession(token, userId)
     setSessionTokenCookie(event, token, session.expiresAt)
-    
-    const verificationCode = await user.verificationCode.generate(
+
+    const verificationCode = await userC.verificationCode.generate(
       userId,
       ueserEmail,
     )

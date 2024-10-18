@@ -4,7 +4,7 @@ import type { PageServerLoad, Actions } from './$types'
 import { sha256 } from 'oslo/crypto'
 import { encodeHex } from 'oslo/encoding'
 
-import { user } from '$db/controller'
+import { userC } from '$db/controller'
 import { sessionsC } from '$lib/server/auth/sessions'
 import { setSessionTokenCookie } from '$lib/server/auth/cookies'
 
@@ -20,9 +20,9 @@ export const load = (async ({ params, setHeaders }) => {
     await sha256(new TextEncoder().encode(verificationToken)),
   )
 
-  const [token] = await user.passwordRecovery.getToken(tokenHash)
+  const [token] = await userC.passwordRecovery.getToken(tokenHash)
 
-  const [resetUser] = await user.getById(token.userId)
+  const [resetUser] = await userC.getById(token.userId)
 
   return {
     email: resetUser.email,
@@ -43,7 +43,7 @@ export const actions: Actions = {
 
     const verificationToken = params.token
 
-    const { data, error } = await user.passwordRecovery.alterPassword(
+    const { data, error } = await userC.passwordRecovery.alterPassword(
       password,
       verificationToken,
     )

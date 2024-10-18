@@ -25,7 +25,7 @@ export function isValidEmail(email: string): boolean {
   return /.+@.+/.test(email)
 }
 // /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-export const user = {
+export const userC = {
   getPublicInfo: function () {
     return db
       .select({
@@ -152,10 +152,10 @@ export const user = {
       const tokenHash = encodeHex(
         await sha256(new TextEncoder().encode(verificationToken)),
       )
-      const [token] = await user.passwordRecovery.getToken(tokenHash)
+      const [token] = await userC.passwordRecovery.getToken(tokenHash)
 
       if (token) {
-        await user.passwordRecovery.deleteToken(tokenHash)
+        await userC.passwordRecovery.deleteToken(tokenHash)
       }
 
       if (!token || !isWithinExpirationDate(token.expiresAt)) {
@@ -167,7 +167,7 @@ export const user = {
       }
 
       const passwordHash = await hash(password)
-      await user.update(token.userId, {
+      await userC.update(token.userId, {
         password_hash: passwordHash,
       })
 
@@ -196,10 +196,10 @@ export const user = {
             }
           }
 
-          let [existingUser] = await user.getByEmail(email)
+          let [existingUser] = await userC.getByEmail(email)
 
           if (!existingUser) {
-            const { data, error } = await user.auth.register.simple(email)
+            const { data, error } = await userC.auth.register.simple(email)
 
             if (error) {
               console.error(error)
@@ -247,7 +247,7 @@ export const user = {
               },
             }
           }
-          const [userDB] = await user.getById(token.userId)
+          const [userDB] = await userC.getById(token.userId)
           if (!userDB || userDB.email !== token.email) {
             return {
               error: {
@@ -287,7 +287,7 @@ export const user = {
             },
           }
         }
-        const [existingUser] = await user.getByEmail(email)
+        const [existingUser] = await userC.getByEmail(email)
         if (!existingUser) {
           return {
             error: {
@@ -339,7 +339,7 @@ export const user = {
             },
           }
         } else {
-          const [exists] = await user.getByUsername(username)
+          const [exists] = await userC.getByUsername(username)
           if (exists) {
             return {
               error: {
@@ -361,7 +361,7 @@ export const user = {
             },
           }
         } else {
-          const [exists] = await user.getByEmail(email)
+          const [exists] = await userC.getByEmail(email)
           if (exists) {
             return {
               error: {
@@ -386,7 +386,7 @@ export const user = {
         const passwordHash = await hash(password)
 
         try {
-          const [newUser] = await user
+          const [newUser] = await userC
             .create({
               username,
               email,
@@ -434,7 +434,7 @@ export const user = {
         }
         try {
           const username = email.split('@')[0]
-          const [newUser] = await user
+          const [newUser] = await userC
             .create({
               email,
               username,

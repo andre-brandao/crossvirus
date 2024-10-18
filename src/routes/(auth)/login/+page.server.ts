@@ -2,12 +2,9 @@ import { fail, redirect } from '@sveltejs/kit'
 
 import type { Actions, PageServerLoad } from './$types'
 
-import { user } from '$db/controller'
+import { userC } from '$db/controller'
 import { sessionsC } from '$lib/server/auth/sessions'
-import {
-  deleteSessionTokenCookie,
-  
-} from '$lib/server/auth/cookies'
+import { deleteSessionTokenCookie } from '$lib/server/auth/cookies'
 
 // import { emailTemplate, sendMail } from '$lib/server/email'
 
@@ -24,7 +21,7 @@ export const actions: Actions = {
 
     const email = formData.get('email')
 
-    const { error } = await user.auth.login.magicLink.send({
+    const { error } = await userC.auth.login.magicLink.send({
       email,
       url,
     })

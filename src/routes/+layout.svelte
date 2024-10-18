@@ -10,7 +10,6 @@
   import NavBar from '$components/navbar/NavBar.svelte'
   // STORE
   import { createUserContext } from '$lib/client/stores/user'
-  import { createCartContext } from '$lib/client/stores/cart'
   // COMPONENTS
   import { ModalContainer } from '$components/modal'
   import Transition from './Transition.svelte'
@@ -20,7 +19,6 @@
 
   const user = createUserContext(data.user)
   $: user.set(data.user)
-  const cart = createCartContext()
 
   // onMount(() => {
   //   changeTheme('bumblebee')

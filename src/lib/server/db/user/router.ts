@@ -2,7 +2,7 @@ import { procedure, router } from '$trpc/t'
 
 import { z } from 'zod'
 
-import { user as userController } from '$db/controller'
+import { userC as userController } from '$db/controller'
 import { sessionsC } from '$lib/server/auth/sessions'
 
 import { emailTemplate, sendMail } from '$lib/server/services/email'
@@ -40,7 +40,7 @@ export const userRouter = router({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const {  locals } = ctx
+      const { locals } = ctx
       const sessionId = locals.session?.id
       const { code } = input
 
@@ -76,7 +76,6 @@ export const userRouter = router({
       const token = sessionsC.generateSessionToken()
       const session = await sessionsC.createSession(token, user.id)
       setSessionTokenCookie(ctx, token, session.expiresAt)
-     
 
       return {
         data: {

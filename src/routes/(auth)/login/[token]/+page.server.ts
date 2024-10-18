@@ -1,10 +1,7 @@
 import type { PageServerLoad } from './$types'
 import { sessionsC } from '$lib/server/auth/sessions'
-import {
-  
-  setSessionTokenCookie,
-} from '$lib/server/auth/cookies'
-import { user } from '$db/controller'
+import { setSessionTokenCookie } from '$lib/server/auth/cookies'
+import { userC } from '$db/controller'
 import { error, redirect } from '@sveltejs/kit'
 
 export const load = (async event => {
@@ -16,7 +13,7 @@ export const load = (async event => {
   })
 
   const { data, error: err } =
-    await user.auth.login.magicLink.validate(verificationToken)
+    await userC.auth.login.magicLink.validate(verificationToken)
 
   if (err) {
     return error(400, {
@@ -29,14 +26,13 @@ export const load = (async event => {
   try {
     await sessionsC.invalidateUserSessions(verifiedUser.id)
 
-    await user.update(verifiedUser.id, {
+    await userC.update(verifiedUser.id, {
       emailVerified: true,
     })
 
     const token = sessionsC.generateSessionToken()
     const session = await sessionsC.createSession(token, verifiedUser.id)
     setSessionTokenCookie(event, token, session.expiresAt)
-
   } catch (e) {
     console.error(e)
     return error(500, {
