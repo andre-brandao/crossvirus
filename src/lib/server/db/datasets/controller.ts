@@ -22,6 +22,7 @@ export const datasetC = {
       //   disease: true,
       // },
       with: {
+        
         rows: {
           columns: {
             id: true,

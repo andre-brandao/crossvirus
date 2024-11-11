@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { i18n } from '$lib/i18n/i18n'
 import { sessionsC } from '$lib/server/auth/sessions'
 import {
@@ -7,7 +8,6 @@ import {
 import type { Handle } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
-import { bugReport } from '$db/controller'
 
 const handleSession: Handle = async ({ event, resolve }) => {
   const sessionId = event.cookies.get('session')
@@ -43,20 +43,8 @@ const handleTRPC = createTRPCHandle({
     if (error.code === 'INTERNAL_SERVER_ERROR') {
       // TODO: send to bug reporting
       const userId = ctx?.locals.user?.id
-      bugReport.insertBugReport({
-        status: 'TODO',
-        text: 'Internal server error',
-        created_by: userId,
-        metadata: {
-          path,
-          type,
-          error,
-          input,
-          req,
-        },
-      })
     }
   },
 })
-
+// RPC - REMOTE PROCEDURE CALL
 export const handle: Handle = sequence(i18n.handle(), handleSession, handleTRPC)

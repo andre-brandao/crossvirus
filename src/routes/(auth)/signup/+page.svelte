@@ -5,10 +5,11 @@
 
   import * as m from '$lib/i18n/paraglide/messages'
 
-  import type { ActionData } from './$types'
+  import type { ActionData, PageData } from './$types'
+
+  export let data: PageData
 
   export let form: ActionData
-
 </script>
 
 <SEO
@@ -52,7 +53,6 @@
           type="password"
           name="password"
           id="password"
-          
         />
       </div>
       <!-- <div>
@@ -67,14 +67,10 @@
           bind:value={confirmPassword}
         />
       </div> -->
-      <button  class="btn btn-primary mt-4 w-full">
-        Continue
-      </button>
+      <button class="btn btn-primary mt-4 w-full">Continue</button>
       <p class=" mt-2 text-center text-sm text-red-500">
         {form?.message ?? ''}
       </p>
-
-     
     </form>
     <p class="mt-4 text-center text-sm">
       {m.already_have_acc()}

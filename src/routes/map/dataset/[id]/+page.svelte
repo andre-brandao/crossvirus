@@ -34,7 +34,6 @@
           >
             <button
               class="btn-apagar btn"
-              on:click={confirmDeleteModel.showModal()}
             >
               <li>Apagar Data Set</li>
             </button>

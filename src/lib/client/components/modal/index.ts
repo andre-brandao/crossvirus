@@ -15,7 +15,8 @@ export interface BaseModalProps {
 
 function createModal() {
   const { subscribe, set } = writable<{
-    component: null | Component<never>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    component: null | Component<any>
     props: null | ComponentProps<Component>
   }>({ component: null, props: null })
 
@@ -39,7 +40,7 @@ function createModal() {
     })
   }
 
-  const alert = (args: ComponentProps<Alert>) => {
+  const alert = (args: ComponentProps<typeof Alert>) => {
     open(Alert, args)
   }
   return {

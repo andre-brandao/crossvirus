@@ -10,6 +10,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 
 {#if $isActive && $modal.component}
+{@const SvelteComponent = $modal.component}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <section
     class=""
@@ -24,7 +25,8 @@
       }}
       class="bg-base-200 rounded-lg p-2 max-w-full overflow-auto"
     >
-      <svelte:component this={$modal.component} {...$modal.props} />
+      <!-- <svelte:component this={$modal.component} {...$modal.props} /> -->
+      <SvelteComponent {...$modal.props} />
     </article>
   </section>
 {/if}

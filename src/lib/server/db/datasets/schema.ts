@@ -48,6 +48,7 @@ export const dataSetTable = pgTable(
     disease_index: index('disease_index').on(t.disease),
   }),
 )
+
 export type SelectDataset = typeof dataSetTable.$inferSelect
 export type InsertDataset = typeof dataSetTable.$inferInsert
 
