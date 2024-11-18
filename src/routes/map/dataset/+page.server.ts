@@ -9,8 +9,7 @@ export const load = (async ({ locals }) => {
   }
 
   const cityDatasets = await datasetC.getCityDatasets(cityId)
-
   return {
     datasets: cityDatasets,
   }
-}) satisfies PageServerLoad
+}) satisfies PageServerLoad 
