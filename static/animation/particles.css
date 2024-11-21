@@ -1,0 +1,24 @@
+/* ---- particles.js container ---- */ 
+
+.particles-js-canvas-el{
+  position: absolute;
+  z-index: 0;
+}
+
+#particles-js
+{ 
+  height: 60vh;
+  width: 100%;
+  background: rgb(203,235,255); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(203,235,255,1) 14%, rgba(240,249,255,1) 87%, rgba(240,249,255,1) 87%); /* FF3.6-15 */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(14%,rgba(203,235,255,1)), color-stop(87%,rgba(240,249,255,1)), color-stop(87%,rgba(240,249,255,1))); /* Chrome4-9,Safari4-5 */
+  background: -webkit-linear-gradient(top,  rgba(203,235,255,1) 14%,rgba(240,249,255,1) 87%,rgba(240,249,255,1) 87%); /* Chrome10-25,Safari5.1-6 */
+  background: -o-linear-gradient(top,  rgba(203,235,255,1) 14%,rgba(240,249,255,1) 87%,rgba(240,249,255,1) 87%); /* Opera 11.10-11.50 */
+  background: -ms-linear-gradient(top,  rgba(203,235,255,1) 14%,rgba(240,249,255,1) 87%,rgba(240,249,255,1) 87%); /* IE10 preview */
+  background: linear-gradient(to bottom,  rgba(203,235,255,1) 14%,rgba(240,249,255,1) 87%,rgba(240,249,255,1) 87%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cbebff', endColorstr='#f0f9ff',GradientType=0 ); /* IE6-9 */
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
