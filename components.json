@@ -7,9 +7,9 @@
 		"baseColor": "gray"
 	},
 	"aliases": {
-		"components": "$lib/components",
-		"utils": "$lib/utils",
-		"ui": "$lib/components/ui",
+		"components": "$lib/client/components",
+		"utils": "$lib/client/utils",
+		"ui": "$lib/client/components/ui",
 		"hooks": "$lib/hooks"
 	},
 	"typescript": true,
