@@ -39,7 +39,7 @@
     },
     {
       name: 'dataset',
-      href: '/dataset'
+      href: '/map/dataset'
     }
   ]
 

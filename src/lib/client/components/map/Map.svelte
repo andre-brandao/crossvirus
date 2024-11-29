@@ -120,7 +120,7 @@
       setSelectedLayers(event.layers)
     })
 
-    L.control.locate().addTo(m)
+    //L.control.locate().addTo(m)
     //@ts-ignore
     L.Control.betterFileLayer({ position: 'topleft' }).addTo(m)
 
