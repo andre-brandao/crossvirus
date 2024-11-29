@@ -10,17 +10,17 @@
   };
 </script>
 
-<div class="w-full sm:w-1/2 card bg-neutral rounded-2xl text-accent px-6 py-4">
+<div class="w-full md:w-1/2 card bg-neutral rounded-2xl text-accent mt-2 px-6 py-4 drop-shadow-md">
   <div class="flex justify-between font-normal">
-    <div class="bg-primary rounded-lg flex p-2">
+    <div class="bg-primary rounded-lg flex p-1">
       {@html icons.camera()}
       <p class="pl-1">{cardData.type}</p>
     </div>
     <p>{cardData.date}</p> 
   </div>
-  <h2 class="text-center font-bold mt-1 text-2xl">{cardData.title}</h2>
+  <h2 class="text-center font-semibold mt-1 text-xl">{cardData.title}</h2>
   <p class="text-center mb-5 text-gray-600 font-light">{cardData.text}</p>
-  <div class="">
+  <div class="img">
     {@html cardData.iframe}
   </div>
   <div class="flex justify-between mt-3">

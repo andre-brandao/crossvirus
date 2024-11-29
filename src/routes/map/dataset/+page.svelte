@@ -87,10 +87,6 @@
         {@html icons.edit()}
       </button>
       <div class:hidden={!editionMode}>
-        <!-- 
-        [09:03, 12/11/2024] André Dev Puc: acho que só o nome, centro e zoom
-        [09:03, 12/11/2024] André Dev Puc: e public 
-        -->
         <button type="submit" class="btn btn-primary" onclick="{() => confirmModal.showModal()}">Confirmar</button>
         <button type="button" class="btn btn-secondary" onclick="{() => editionMode = false}">Cancelar</button>
       </div>

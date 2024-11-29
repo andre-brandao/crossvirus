@@ -9,8 +9,9 @@ export const load = (async ({ params }) => {
   const map_info = await mapC.getMapById(mapID)
   console.log(map_info)
 
-  if (!map_info) {
-    return error(404, 'Map not found')
-  }
+  // if (!map_info) {
+  //   return error(404, 'Map not found')
+  // }
+  
   return { map: map_info }
 }) satisfies PageServerLoad

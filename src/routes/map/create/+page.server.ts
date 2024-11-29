@@ -1,17 +1,15 @@
 import { redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import { map } from '$db/controller'
+import { mapC, datasetC } from '$db/controller'
 export const load = (async ({ locals }) => {
   const { user } = locals
-  if (!user) {
+  if (!user?.cityId) {
     redirect(303, '/login')
   }
 
-  const datasets = await map.getUserData(user.id)
+  const datasets = await datasetC.getCityDatasets(user.cityId)
 
-  const public_datasets = await map.getPublicData
   return {
     datasets,
-    public_datasets,
   }
 }) satisfies PageServerLoad

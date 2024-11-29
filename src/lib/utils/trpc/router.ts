@@ -8,7 +8,7 @@ import { userRouter } from '$db/user/router'
 import { cityRoutere, mapRouter } from '$db/map/router'
 import { datasetRouter } from '$db/datasets/router'
 
-//  RPC = REMOTE PROCCEDURE CALL
+// RPC = REMOTE PROCCEDURE CALL
 // TRPC = TS REMOTE PROCCEDURE CALL
 // GRPC = GOOGLE REMOTE PROCCEDURE CALL
 
