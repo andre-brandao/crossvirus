@@ -44,6 +44,8 @@
 <style>
   .bgImage{
     background-image: url("images/backgroundAdvantages.png");
+    background-size: cover; /* ajusta o tamanho da imagem para cobrir toda a página */
+    background-position: center; /* centraliza a imagem */
   }
   .bg-red{
     background-color: #981010;

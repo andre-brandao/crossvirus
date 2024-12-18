@@ -17,7 +17,7 @@ text={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod t
 haveBotton={false}
 />
 
-<div class="gap-8 flex flex-col justify-center md:full md:flex-row md:space-x-8 px-10 lg:px-36 mt-5">
+<div class="gap-8 flex flex-col justify-center items-center md:full md:flex-row md:space-x-8 px-10 lg:px-36 mt-5">
   <CardExempleMap 
   title={"João Monlevade"}
   img={"images/exemploCidade.png"}

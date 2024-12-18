@@ -12,7 +12,7 @@
 
 </script>
 
-<div class="flex flex-col md:full md:flex-row md:space-x-8 px-10 lg:px-36 mt-5">
+<div class="flex flex-col md:full md:flex-row md:space-x-8 px-5 lg:px-36 mt-5">
   <div class="text-center my-20 ">
     <p class="text-fazemos -mb-3">{subTitle}</p>
     <h1 class="text-about mb-5">{title}</h1>

@@ -84,6 +84,7 @@
     "oslo": "^1.2.1",
     "paneforge": "^0.0.6",
     "papaparse": "^5.4.1",
+    "particles.js": "^2.0.0",
     "postgres": "^3.4.5",
     "sharp": "^0.33.5",
     "superjson": "^2.2.1",

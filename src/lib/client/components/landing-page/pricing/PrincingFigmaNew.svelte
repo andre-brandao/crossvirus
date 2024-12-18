@@ -6,7 +6,7 @@
     desc: 'Acesso Limitado, sem funcionalidades premium',
     price: 'R$45,00',
     quantHabitantes: '/1.000 habitantes',
-    autor: [true, false, false, false, false]
+    autor: [true, true, false, false, false]
   }
 
   let mediasCidades = {
@@ -26,8 +26,26 @@
   }
 </script>
 
+<p class="text-fazemos text-center -mb-3">Perfeito para todas as prefeituras</p>
+<h1 class="text-about text-center mb-5">Escolha seu plano</h1>
+
 <div class="gap-8 flex flex-col justify-center md:full md:flex-row md:space-x-8 px-10 lg:px-36 mt-5">
   <CardPrincingFigma textCard={pequenasCidades}/>
   <CardPrincingFigma textCard={mediasCidades}/>
   <CardPrincingFigma textCard={metropoles}/>
 </div>
+
+<style>
+  .text-fazemos{
+    color: #FFB939;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+  }
+  .text-about{
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 0%;
+  }
+</style>

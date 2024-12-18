@@ -11,41 +11,35 @@
     }
   }
 
+  let itensDisponiveis = [
+    "Cardapio de funcionalidades",
+    "Envio de Emails",
+    "Relatorios",
+    "Monitoramento",
+    "Controle de acessos"
+  ]
+
   let { textCard } : Props = $props();
 </script>
 
 <div class="card rounded-2xl text-accent border-card px-6 py-4">
-  <div class="text-center">
+  <div class="text-center mb-8">
     <h2 class="font-extrabold mt-3 text-2xl">{textCard.title}</h2>
-    <p class="mt-1 sub-title-princing">Acesso Limitado, sem funcionalidades premium</p>
-    <p class="mt-8 text-4xl font-bold">R$45,00</p>
-    <p class="-mt-1 text-lg font-light text-gray-800">/1.000 habitantes
-    </p>
+    <p class="mt-1 sub-title-princing">{textCard.desc}</p>
+    <p class="mt-8 text-4xl font-bold">Fale conosco</p>
+    <!-- <p class="-mt-1 text-lg font-light text-gray-800">{textCard.price}</p> -->
   </div>
-  <div>
-    <div class="flex mt-8">
-      <span class=""></span>
-    </div>
-    <div class="flex mt-2">
-      <span class="text-red-500">{@html icons.x()}</span>
-      <span class="ml-2">Lorem ipsum dolor sit amet.</span>
-    </div>
-    <div class="flex mt-2">
-      <span class="text-red-500">{@html icons.x()}</span>
-      <span class="ml-2">Lorem ipsum dolor sit amet.</span>
-    </div>
-    <div class="flex mt-2">
-      <span class="text-red-500">{@html icons.x()}</span>
-      <span class="ml-2">Lorem ipsum dolor sit amet.</span>
-    </div>
-    <div class="flex mt-2">
-      <span class="text-green-500">{@html icons.x()}</span>
-      <span class="ml-2">Lorem ipsum dolor sit amet.</span>
-    </div>
-    <div class="flex mt-2">
-      <span class="text-green-500">{@html icons.x()}</span>
-      <span class="ml-2">Lorem ipsum dolor sit amet.</span>
-    </div>
+  <div class="">
+    {#each itensDisponiveis as i, index}
+      <div class="flex mt-2">
+        {#if textCard.autor[index]}
+          <span class="text-green-500">{@html icons.x()}</span>
+          {:else}
+             <span class="text-red-500">{@html icons.x()}</span>
+        {/if}
+        <span class="ml-2">{i}</span>
+      </div>
+    {/each}
   </div>
   <button class="btn w-full text-neutral mt-5" style="background-color: #485573;">
     Entre em contato

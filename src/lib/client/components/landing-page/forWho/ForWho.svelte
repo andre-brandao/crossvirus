@@ -3,12 +3,12 @@
 </script>
 
 <div class="flex flex-col md:full md:flex-row md:space-x-8 px-10 lg:px-36 mt-5">
-  <div class="flex mb-20">
-    <div class="w-4/12">
+  <div class="block sm:flex mb-20">
+    <div class="w-full sm:w-4/12">
       <p class="text-publico-alvo">Público-alvo</p>
       <h1 class="text-alvo">Para quem é a <br>Crossvírus IA ?</h1>
     </div>
-    <div class="w-8/12">
+    <div class="w-full sm:w-8/12">
       <div>
         <div class="flex">
           <div class="bg-gray-100 px-1 py-2 rounded-sm">
