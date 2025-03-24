@@ -10,7 +10,7 @@
   };
 </script>
 
-<div class="w-full sm:w-1/2 card bg-neutral rounded-2xl text-accent px-6 py-4">
+<div class="{$$props.class} lg:mt-0 w-full lg:w-1/2 bg-gray-50 text-accent p-6 py-4 rounded-lg border border-gray-200 shadow-md">
   <div class="flex justify-between font-normal">
     <div class="bg-primary rounded-lg flex p-2">
       {@html icons.camera()}
@@ -20,7 +20,7 @@
   </div>
   <h2 class="text-center font-bold mt-1 text-2xl">{cardData.title}</h2>
   <p class="text-center mb-5 text-gray-600 font-light">{cardData.text}</p>
-  <div class="">
+  <div class="w-full px-8">
     {@html cardData.iframe}
   </div>
   <div class="flex justify-between mt-3">

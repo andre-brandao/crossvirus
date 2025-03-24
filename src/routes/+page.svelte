@@ -17,7 +17,7 @@
     date: '21/02/2024',
     title: 'TV Horizonte',
     text: 'Entrevista com Sandro Laudares na TV Horizonte',
-    iframe: '<iframe height="220" class="w-full mx-3" src="https://www.youtube.com/embed/yjmzMlVk8SE" title="Startup Crossvirus IA | Horizonte Notícia" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+    iframe: '<iframe height="220" class="w-full" src="https://www.youtube.com/embed/yjmzMlVk8SE" title="Startup Crossvirus IA | Horizonte Notícia" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     autor: 'Crossvirus'
   }
 
@@ -26,7 +26,7 @@
     date: '22/02/2024',
     title: 'Rádio América',
     text: 'Entrevista de radio',
-    iframe: '<img class="w-full bg-primary mt-24" src="images/radioAmerica.png" alt="">',
+    iframe: ' <div class="flex self-center"> <img class="w-full bg-primary mt-24" src="images/radioAmerica.png" alt=""> </div>',
     autor: 'Crossvirus'
   }
 
@@ -62,8 +62,6 @@
   },
 })}
 />
-
-<!-- TODO: Colocar os svgs no arquivo de svg e alterar a responsividade dos cards  -->
 
 <!-- <Modal onClose={console.log} onOpen={console.log}>Teste Modal</Modal> -->
 <main class="container-lg mx-auto px-4 relative w-full h-screen">
@@ -102,9 +100,9 @@
   
   <h1 class="font-bold text-center text-4xl mt-24">Entrevistas</h1>
   <p class="text-center mt-2 text-2xl font-light text-gray-600">Lista de entrevistas realizadas com a equipe Crossvirus</p>
-  <div class="flex space-x-8 px-28 mt-5">
+  <div class="flex flex-wrap px-28 mt-5">
     <CardHome cardData={cardDataTvHorizonte}/>
-    <CardHome cardData={cardDataRadioAmerica}/>
+    <CardHome cardData={cardDataRadioAmerica} class="mt-5"/>
   </div>
   
   <h1 class="font-bold text-center text-4xl mt-24">Publicações científicas</h1>
