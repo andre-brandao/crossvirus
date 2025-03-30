@@ -35,7 +35,7 @@
     },
     {
       name: 'Mapas',
-      href: '/map',
+      href: '/maps',
     },
     {
       name: 'dataset',
