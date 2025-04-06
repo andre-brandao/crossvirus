@@ -2,13 +2,13 @@
 </script>
 
 <div class="mx-auto max-w-screen-xl px-4 lg:px-6">
-  <div class="w-full pl-5 mb-8 text-center">
+  <div class="w-full mb-8 text-center">
     <h1 class="text-5xl font-bold gradient-title">Nossos mapas</h1>
     <h2 class="text-xl font-semibold">Alguns de nossos mapas</h2>
   </div>
-  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+  <div class="flex flex-wrap gap-6 justify-center">
     <a
-      href="https://www.crossvirus.com.br/original_maps/cluster"
+      href="/staticMaps/cluster.html"
       class="bg-300% animate-gradient grid h-72 w-96 grid-cols-1 items-end gap-6 rounded-xl bg-gray-100 from-secondary via-primary to-secondary p-3 font-bold shadow-sm hover:bg-gray-500 hover:bg-gradient-to-r hover:bg-clip-text hover:text-transparent hover:shadow-md max-md:items-center"
     >
       <h1 class="text-xl font-semibold">
