@@ -6,31 +6,33 @@
     title: '',
     text: '',
     autor: '',
-    iframe: ''
+    iframe: '',
+    link : '',
+    width : 'lg:w-96'
   };
 </script>
 
-<div class="w-full sm:w-1/2 card bg-neutral rounded-2xl text-accent px-6 py-4">
+<div class="{$$props.class} lg:mt-0 w-full {cardData.width} bg-gray-50 text-accent p-6 py-4 rounded-lg border border-gray-200 shadow-md">
   <div class="flex justify-between font-normal">
-    <div class="bg-primary rounded-lg flex p-2">
+    <div class="bg-primary text-white text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded ">
       {@html icons.camera()}
-      <p class="pl-1">{cardData.type}</p>
+      <p class="pl-1 ">{cardData.type}</p>
     </div>
-    <p>{cardData.date}</p> 
+    <p class="text-sm text-gray-500">{cardData.date}</p> 
   </div>
-  <h2 class="text-center font-bold mt-1 text-2xl">{cardData.title}</h2>
-  <p class="text-center mb-5 text-gray-600 font-light">{cardData.text}</p>
-  <div class="">
+  <a href="{cardData.link}"><h2 class="text-center font-bold text-2xl mt-2">{cardData.title}</h2></a>
+  <p class="mb-5 font-light text-gray-500 dark:text-gray-400">{cardData.text}</p>
+  <div class="w-full flex justify-center h-40 px-6">
     {@html cardData.iframe}
   </div>
-  <div class="flex justify-between mt-3">
+  <footer class="flex justify-between mt-auto pt-3">
     <div class="flex">
       <img class="rounded-full mr-2" src="images/teste-perfil.png" alt="">
-      <p class="self-center">{cardData.autor}</p>
+      <p class="self-center font-medium">{cardData.autor}</p>
     </div>
     <div class="flex self-center">
-      <a class="mr-2  self-center" href="#">Saiba mais</a>
+      <a class="mr-2 self-center" href="{cardData.link}">Saiba mais</a>
       {@html icons.arrowRight()}
     </div>
-  </div>
+  </footer>
 </div>
